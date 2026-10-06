@@ -1,5 +1,7 @@
 package com.EjercicioAyudantia.ISoft.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class Task {
 
     private Long id;
@@ -8,6 +10,7 @@ public class Task {
     private String fechaLimite;
     private boolean completada = false;
 
+    @JsonCreator
     public Task() {
     }
 
