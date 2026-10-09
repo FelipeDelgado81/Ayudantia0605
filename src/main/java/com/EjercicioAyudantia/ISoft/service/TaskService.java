@@ -39,4 +39,13 @@ public class TaskService {
                 .sorted(Comparator.comparing(Task::getId))
                 .collect(Collectors.toList());
     }
+
+    public Task completar(Long id) {
+        Task tarea = tareas.get(id);
+        if (tarea == null) {
+            return null;
+        }
+        tarea.setCompletada(true);
+        return tarea;
+    }
 }
