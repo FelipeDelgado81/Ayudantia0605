@@ -1,0 +1,28 @@
+name: Publicar imagen en GHCR
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v6
+
+      - name: Iniciar sesion en GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Construir y publicar imagen
+        run: |
+          imagen="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker build -t "$imagen:latest" --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" .
+          docker push "$imagen:latest"
